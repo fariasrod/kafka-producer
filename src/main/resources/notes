@@ -1,0 +1,5 @@
+docker build -t fariasrodrigo/spring-boot-kafka-producer:latest .
+docker push fariasrodrigo/spring-boot-kafka-producer:latest
+
+docker container run --name spring-boot-kafka-producer -p 5001:5001 -e "SPRING_PROFILES_ACTIVE=default" fariasrodrigo/spring-boot-kafka-producer:latest
+docker container run --name spring-boot-kafka-consumer -p 5002:5002 -e "SPRING_PROFILES_ACTIVE=default" fariasrodrigo/spring-boot-kafka-consumer:latest
