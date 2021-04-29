@@ -20,7 +20,7 @@ public class UserResource {
     @Autowired
     private KafkaTemplate<String, User> kafkaTemplate;
 
-    private static final String TOPIC = "kafka_user_1";
+    private static final String TOPIC = "restaurant";
 
     @PostMapping("/publish")
     public String publish(@RequestBody User user) {
