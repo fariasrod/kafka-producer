@@ -2,16 +2,12 @@ version: '3'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
-    networks:
-      - broker-kafka
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka:
     image: confluentinc/cp-kafka:latest
-    networks:
-      - broker-kafka
     depends_on:
       - zookeeper
     ports:
@@ -26,8 +22,6 @@ services:
 
   kafdrop:
     image: obsidiandynamics/kafdrop:latest
-    networks:
-      - broker-kafka
     depends_on:
       - kafka
     ports:
@@ -35,6 +29,22 @@ services:
     environment:
       KAFKA_BROKERCONNECT: kafka:29092
 
-networks:
-  broker-kafka:
-    driver: bridge
+  spring-producer:
+    image: fariasrodrigo/spring-boot-kafka-producer:latest
+    container_name: spring-boot-kafka-producer
+    environment:
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+    ports:
+      - "5001:5001"
+    depends_on:
+      - kafka
+
+  spring-consumer:
+    image: fariasrodrigo/spring-boot-kafka-consumer:latest
+    container_name: spring-boot-kafka-consumer
+    environment:
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+    ports:
+      - "5002:5002"
+    depends_on:
+      - kafka
